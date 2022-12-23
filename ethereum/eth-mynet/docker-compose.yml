@@ -3,9 +3,7 @@ services:
 
   bootnode:
     hostname: bootnode
-    image: eth-my-net:latest
-    build:
-      context: .
+    image: ghcr.io/sudachen/eth-mynet:latest
     command:
       --datadir /data
       --nodekey /node.key
@@ -18,7 +16,7 @@ services:
 
   rpcnode:
     hostname: rpcnode
-    image: eth-my-net:latest
+    image: ghcr.io/sudachen/eth-mynet:latest
     depends_on:
       - bootnode
     command:
@@ -40,7 +38,7 @@ services:
 
   clique:
     hostname: clique
-    image: eth-my-net:latest
+    image: ghcr.io/sudachen/eth-mynet:latest
     depends_on:
       - bootnode
     command:

@@ -1,5 +1,8 @@
-FROM ethereum/client-go:stable
-ARG  ACCOUNT_PASSWORD
+FROM ethereum/client-go:latest
+LABEL org.opencontainers.image.source=https://github.com/sudachen/MyCryptoLab
+LABEL org.opencontainers.image.description="Ethereum private test network with PoS"
+LABEL org.opencontainers.image.licenses=MIT
+
 COPY entrypoint /
 COPY node.key /
 RUN chmod a+x /entrypoint
@@ -17,7 +20,7 @@ X=$(geth --log.file /tmp/1.log \
     | cut -d ':' -f 2 | xargs) && \
 echo ${X#0x} > /account.txt &&  \
 sed -i /genesis.json \
-    -e s:XYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXY:${X#0x}:g && \
+    -e s:ABABABABABABABABABABABABABABABABABABABAB:${X#0x}:g && \
 geth init --datadir /data /genesis.json && \
   rm -f /data/geth/nodekey
 
