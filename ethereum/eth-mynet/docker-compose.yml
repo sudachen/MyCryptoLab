@@ -46,7 +46,7 @@ services:
       --datadir /data
       --mine
       --networkid=${NETWORK_ID}
-      --unlock 0x$$ETH_ACCOUNT
+      --unlock 0x${ETH_ACCOUNT}
       --password /password.txt
       --port 30303
     environment:
