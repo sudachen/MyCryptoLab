@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  geth:
+    hostname: geth
+    build:
+      context: .
+    user: nobody:nobody
+    volumes:
+     - geth:/geth:rw
+    ports:
+      # HTTP server / GraphQL API
+      - 8545:8545
+      # WebSocket
+      - 8546:8546
+      # Network listening port (P2P networking)
+      - 30303:30303
+    command:
+      --syncmode=light
+      --cache=8192
+      --ws
+      --ws.addr=0.0.0.0
+      --http
+      --http.api="eth,web3,net,admin,personal"
+      --http.addr=0.0.0.0
+      --http.vhosts='*'
+      --graphql
+      --graphql.vhosts='*'
+      --metrics
+      --mainnet
+      --maxpeers=30
+      --datadir=/geth
+
+volumes:
+  geth:
+    driver: local

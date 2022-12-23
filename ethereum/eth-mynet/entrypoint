@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export ETH_ACCOUNT=$(cat account.txt)
+/wait
+exec /bin/sh -c "exec geth $*"

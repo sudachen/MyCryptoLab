@@ -1,0 +1,63 @@
+version: '3'
+services:
+
+  bootnode:
+    hostname: bootnode
+    image: eth-my-net:latest
+    build:
+      context: .
+    command:
+      --datadir /data
+      --nodekey /node.key
+      --networkid=${NETWORK_ID}
+      --port 30303
+    expose:
+      - 30303
+    networks:
+      internal:
+
+  rpcnode:
+    hostname: rpcnode
+    image: eth-my-net:latest
+    depends_on:
+      - bootnode
+    command:
+      --bootnodes=${BOOT_NODES}
+      --datadir /data
+      --allow-insecure-unlock
+      --http
+      --http.addr="0.0.0.0"
+      --http.api="eth,web3,net,admin,personal"
+      --http.corsdomain="*"
+      --networkid=${NETWORK_ID}
+      --port 30303
+    ports:
+      - "${RPC_PORT}:8545"
+    environment:
+      - WAIT_HOSTS=bootnode:30303
+    networks:
+      internal:
+
+  clique:
+    hostname: clique
+    image: eth-my-net:latest
+    depends_on:
+      - bootnode
+    command:
+      --bootnodes=${BOOT_NODES}
+      --datadir /data
+      --mine
+      --networkid=${NETWORK_ID}
+      --unlock 0x$$ETH_ACCOUNT
+      --password /password.txt
+      --port 30303
+    environment:
+      - WAIT_HOSTS=bootnode:30303
+    networks:
+      internal:
+
+
+networks:
+  internal:
+    driver: bridge
+
